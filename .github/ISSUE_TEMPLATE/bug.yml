@@ -1,0 +1,62 @@
+name: Bug report
+description: Reportá un defecto en el frontend CRM
+title: '[bug]: '
+labels: ['bug']
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción
+      description: Resumen claro del problema.
+      placeholder: ¿Qué está fallando?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      description: Lista numerada de pasos.
+      placeholder: |
+        1. Ir a...
+        2. Hacer clic en...
+        3. Observar...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Resultado esperado
+      description: Qué debería ocurrir.
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Resultado obtenido
+      description: Qué ocurre actualmente.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Evidencia
+      description: Capturas, videos, logs o links.
+    validations:
+      required: false
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: Información del entorno
+      description: Navegador, SO, rol de usuario, branch, etc.
+      placeholder: |
+        - OS:
+        - Browser:
+        - Role:
+        - Branch:
+    validations:
+      required: true

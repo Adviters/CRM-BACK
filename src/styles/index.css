@@ -1,0 +1,132 @@
+@import 'tailwindcss';
+
+@theme {
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, sans-serif;
+  --font-display: 'Source Serif 4', Georgia, serif;
+
+  --color-canvas: #f6f7f9;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f0f2f5;
+  --color-border: #e2e6ec;
+  --color-border-strong: #c8d0db;
+
+  --color-ink: #12161c;
+  --color-ink-secondary: #3d4654;
+  --color-ink-muted: #6b7585;
+  --color-ink-faint: #9aa3b2;
+
+  --color-brand: #0f6e56;
+  --color-brand-hover: #0c5a46;
+  --color-brand-soft: #e6f4ef;
+  --color-brand-ring: #2a9d7a;
+
+  --color-danger: #c0362c;
+  --color-danger-soft: #fdeceb;
+  --color-warning: #b45309;
+  --color-warning-soft: #fff7ed;
+  --color-success: #0f766e;
+  --color-success-soft: #ecfdf8;
+  --color-info: #1d4ed8;
+  --color-info-soft: #eff6ff;
+
+  --shadow-panel: 0 1px 2px rgb(18 22 28 / 4%), 0 8px 24px rgb(18 22 28 / 4%);
+  --radius-panel: 0.875rem;
+}
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html.dark {
+    color-scheme: dark;
+    --color-canvas: #0d1117;
+    --color-surface: #151b23;
+    --color-surface-muted: #1c2430;
+    --color-border: #2a3441;
+    --color-border-strong: #3a4656;
+    --color-ink: #f3f5f7;
+    --color-ink-secondary: #c4cbd6;
+    --color-ink-muted: #8b95a5;
+    --color-ink-faint: #657082;
+    --color-brand-soft: #12352c;
+    --color-danger-soft: #3a1a18;
+    --color-warning-soft: #3a2712;
+    --color-success-soft: #12352f;
+    --color-info-soft: #15233a;
+  }
+
+  * {
+    border-color: var(--color-border);
+  }
+
+  html,
+  body,
+  #root {
+    min-height: 100%;
+  }
+
+  body {
+    margin: 0;
+    font-family: var(--font-sans);
+    background: var(--color-canvas);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  button,
+  input,
+  textarea,
+  select {
+    font: inherit;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  a {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-brand) 25%, transparent);
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .panel {
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-panel);
+    box-shadow: var(--shadow-panel);
+  }
+
+  .page-enter {
+    animation: page-enter 280ms ease-out;
+  }
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes shimmer {
+    100% {
+      transform: translateX(100%);
+    }
+  }
+}

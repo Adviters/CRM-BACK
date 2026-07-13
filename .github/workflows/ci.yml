@@ -1,0 +1,57 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - develop
+      - main
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Enable pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: TypeScript type check
+        run: pnpm exec tsc -b --pretty false
+
+      - name: ESLint
+        run: pnpm run lint
+
+      - name: Prettier check
+        run: |
+          if pnpm exec prettier --version >/dev/null 2>&1; then
+            pnpm exec prettier --check .
+          else
+            echo "Prettier no está configurado. Se omite el check."
+          fi
+
+      - name: Build
+        run: pnpm run build
+
+      - name: Unit tests with coverage
+        run: pnpm run test:coverage

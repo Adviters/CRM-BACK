@@ -1,0 +1,13 @@
+# CODEOWNERS
+#
+# Define los responsables por defecto del repositorio.
+# Reemplazá los placeholders con usuarios o equipos de GitHub reales.
+#
+# Documentación: https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+#
+# Ejemplos:
+#   *       @tu-org/frontend-team
+#   /src/   @usuario-frontend
+#   /.github/ @tu-org/devops-team
+
+* @CHANGE_ME_OWNER
