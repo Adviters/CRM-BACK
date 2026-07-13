@@ -35,12 +35,23 @@ export function PetEditPage() {
             isSubmitting={updatePet.isPending}
             submitLabel="Guardar cambios"
             onSubmit={(values) => {
-              const { customerId: _customerId, ...payload } = values
-              updatePet.mutate(payload, {
-                onSuccess: () => {
-                  void navigate(ROUTES.petDetail(id))
+              updatePet.mutate(
+                {
+                  name: values.name,
+                  species: values.species,
+                  breed: values.breed,
+                  sex: values.sex,
+                  birthDate: values.birthDate,
+                  currentWeight: values.currentWeight,
+                  color: values.color,
+                  notes: values.notes,
                 },
-              })
+                {
+                  onSuccess: () => {
+                    void navigate(ROUTES.petDetail(id))
+                  },
+                },
+              )
             }}
           />
         </CardBody>
