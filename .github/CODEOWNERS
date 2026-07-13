@@ -1,0 +1,21 @@
+# CODEOWNERS
+#
+# Los usuarios o equipos listados acá son asignados automáticamente como
+# reviewers en cada Pull Request que toque los paths indicados.
+# Con la protección de ramas activada ("Require review from Code Owners"),
+# su aprobación pasa a ser obligatoria para poder mergear.
+#
+# Sintaxis: <patrón de archivos> <@usuario | @org/equipo | email>
+# La última regla que matchea un archivo es la que aplica.
+#
+# Reemplazá los ejemplos con los responsables reales del repositorio.
+
+# Dueño por defecto de todo el repositorio
+* @tu-usuario
+
+# Ejemplos de ownership por área (descomentá y ajustá según el equipo):
+# /src/auth/            @tu-usuario @org/equipo-seguridad
+# /prisma/              @org/equipo-backend
+# /.github/             @org/equipo-devops
+# docker-compose.yml    @org/equipo-devops
+# Dockerfile            @org/equipo-devops

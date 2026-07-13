@@ -1,0 +1,184 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  ADMIN
+  VETERINARIAN
+  RECEPTIONIST
+}
+
+enum PetSex {
+  MALE
+  FEMALE
+  UNKNOWN
+}
+
+enum AppointmentStatus {
+  PENDING
+  CONFIRMED
+  COMPLETED
+  CANCELLED
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  email        String    @unique
+  passwordHash String
+  firstName    String
+  lastName     String
+  role         Role
+  isActive     Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  refreshTokens          RefreshToken[]
+  medicalRecordsCreated  MedicalRecord[] @relation("MedicalRecordVeterinarian")
+  vaccinesApplied        Vaccine[]       @relation("VaccineVeterinarian")
+  appointmentsAssigned   Appointment[]   @relation("AppointmentVeterinarian")
+  customersCreated       Customer[]      @relation("CustomerCreatedBy")
+  petsCreated            Pet[]           @relation("PetCreatedBy")
+  appointmentsCreated    Appointment[]   @relation("AppointmentCreatedBy")
+
+  @@index([deletedAt])
+  @@index([role])
+  @@map("users")
+}
+
+model RefreshToken {
+  id        String    @id @default(uuid()) @db.Uuid
+  tokenHash String
+  userId    String    @db.Uuid
+  expiresAt DateTime
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@map("refresh_tokens")
+}
+
+model Customer {
+  id          String    @id @default(uuid()) @db.Uuid
+  firstName   String
+  lastName    String
+  document    String    @unique
+  phone       String
+  email       String?
+  address     String?
+  createdById String?   @db.Uuid
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  createdBy User? @relation("CustomerCreatedBy", fields: [createdById], references: [id])
+  pets      Pet[]
+
+  @@index([deletedAt])
+  @@index([lastName, firstName])
+  @@map("customers")
+}
+
+model Pet {
+  id           String    @id @default(uuid()) @db.Uuid
+  name         String
+  species      String
+  breed        String?
+  sex          PetSex    @default(UNKNOWN)
+  birthDate    DateTime? @db.Date
+  currentWeight Decimal? @db.Decimal(8, 2)
+  color        String?
+  notes        String?
+  customerId   String    @db.Uuid
+  createdById  String?   @db.Uuid
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  deletedAt    DateTime?
+
+  customer       Customer        @relation(fields: [customerId], references: [id])
+  createdBy      User?           @relation("PetCreatedBy", fields: [createdById], references: [id])
+  medicalRecords MedicalRecord[]
+  vaccines       Vaccine[]
+  appointments   Appointment[]
+
+  @@index([customerId])
+  @@index([deletedAt])
+  @@map("pets")
+}
+
+model MedicalRecord {
+  id             String   @id @default(uuid()) @db.Uuid
+  date           DateTime @default(now())
+  reason         String
+  diagnosis      String
+  treatment      String
+  observations   String?
+  weight         Decimal? @db.Decimal(8, 2)
+  petId          String   @db.Uuid
+  veterinarianId String   @db.Uuid
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  pet          Pet  @relation(fields: [petId], references: [id])
+  veterinarian User @relation("MedicalRecordVeterinarian", fields: [veterinarianId], references: [id])
+
+  @@index([petId])
+  @@index([veterinarianId])
+  @@index([date])
+  @@map("medical_records")
+}
+
+model Vaccine {
+  id               String    @id @default(uuid()) @db.Uuid
+  name             String
+  appliedAt        DateTime
+  nextApplicationAt DateTime?
+  petId            String    @db.Uuid
+  veterinarianId   String    @db.Uuid
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+
+  pet          Pet  @relation(fields: [petId], references: [id])
+  veterinarian User @relation("VaccineVeterinarian", fields: [veterinarianId], references: [id])
+
+  @@index([petId])
+  @@index([veterinarianId])
+  @@index([nextApplicationAt])
+  @@index([deletedAt])
+  @@map("vaccines")
+}
+
+model Appointment {
+  id             String            @id @default(uuid()) @db.Uuid
+  date           DateTime          @db.Date
+  time           DateTime          @db.Time(0)
+  reason         String
+  status         AppointmentStatus @default(PENDING)
+  petId          String            @db.Uuid
+  veterinarianId String            @db.Uuid
+  createdById    String?           @db.Uuid
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  deletedAt      DateTime?
+
+  pet          Pet   @relation(fields: [petId], references: [id])
+  veterinarian User  @relation("AppointmentVeterinarian", fields: [veterinarianId], references: [id])
+  createdBy    User? @relation("AppointmentCreatedBy", fields: [createdById], references: [id])
+
+  @@index([petId])
+  @@index([veterinarianId])
+  @@index([date, status])
+  @@index([deletedAt])
+  @@map("appointments")
+}

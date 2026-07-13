@@ -1,0 +1,4 @@
+# This file should be a valid Prisma Migrate lock file.
+# It identifies the database provider for which migrations were generated.
+
+provider = "postgresql"

@@ -1,0 +1,61 @@
+name: Bug report
+description: Reportar un error o comportamiento inesperado
+title: '[Bug]: '
+labels:
+  - bug
+body:
+  - type: textarea
+    id: description
+    attributes:
+      label: Descripción del bug
+      description: Explicá claramente qué está fallando.
+      placeholder: Al cancelar un turno ya cancelado la API devuelve 500 en lugar de 400...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Pasos para reproducir
+      description: Lista ordenada de pasos para reproducir el problema.
+      placeholder: |
+        1. Hacer login como RECEPTIONIST
+        2. Llamar a POST /api/appointments/:id/cancel
+        3. Repetir la misma llamada
+        4. Ver el error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Comportamiento esperado
+      description: ¿Qué debería pasar?
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Comportamiento actual
+      description: ¿Qué pasa en su lugar? Incluí el mensaje de error o respuesta de la API si aplica.
+    validations:
+      required: true
+
+  - type: input
+    id: environment
+    attributes:
+      label: Entorno
+      description: Sistema operativo, versión de Node.js y rama/commit.
+      placeholder: Windows 11, Node 22.x, develop @ abc1234
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs relevantes
+      description: Pegá logs o stack traces. Se formatean automáticamente como código.
+      render: shell
+    validations:
+      required: false

@@ -1,0 +1,50 @@
+name: Feature request
+description: Proponer una nueva funcionalidad o mejora
+title: '[Feature]: '
+labels:
+  - enhancement
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problema o necesidad
+      description: ¿Qué problema resuelve esta funcionalidad? ¿Quién la necesita?
+      placeholder: Como recepcionista necesito poder reprogramar un turno sin cancelarlo...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solución propuesta
+      description: Describí cómo debería funcionar.
+      placeholder: Agregar un endpoint PATCH /appointments/:id/reschedule que...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternativas consideradas
+      description: Otras soluciones que hayas evaluado y por qué se descartan.
+    validations:
+      required: false
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Prioridad sugerida
+      options:
+        - Baja
+        - Media
+        - Alta
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Contexto adicional
+      description: Capturas, diagramas, referencias o cualquier información útil.
+    validations:
+      required: false
