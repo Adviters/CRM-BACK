@@ -14,7 +14,8 @@ export class AppointmentMapper {
       status: appointment.status as AppointmentStatus,
       petId: appointment.petId,
       veterinarianId: appointment.veterinarianId,
-      veterinarianName: `${appointment.veterinarian.firstName} ${appointment.veterinarian.lastName}`.trim(),
+      veterinarianName:
+        `${appointment.veterinarian.firstName} ${appointment.veterinarian.lastName}`.trim(),
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,
     };
