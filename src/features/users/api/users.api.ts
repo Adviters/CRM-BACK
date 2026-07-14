@@ -5,11 +5,16 @@ import type {
   UpdateUserPayload,
   UserDto,
   UsersListParams,
+  VeterinarianOptionDto,
 } from '../types/user.types'
 
 export const usersApi = {
   list: async (params: UsersListParams = {}): Promise<PaginatedResult<UserDto>> => {
     const { data } = await api.get<PaginatedResult<UserDto>>('/users', { params })
+    return data
+  },
+  listVeterinarians: async (): Promise<VeterinarianOptionDto[]> => {
+    const { data } = await api.get<VeterinarianOptionDto[]>('/users/veterinarians')
     return data
   },
   getById: async (id: string): Promise<UserDto> => {

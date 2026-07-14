@@ -20,6 +20,14 @@ export function useUsers(
   })
 }
 
+export function useVeterinarians(options?: { enabled?: boolean }) {
+  return useQuery({
+    queryKey: queryKeys.users.veterinarians,
+    queryFn: () => usersApi.listVeterinarians(),
+    enabled: options?.enabled ?? true,
+  })
+}
+
 export function useUser(id?: string) {
   return useQuery({
     queryKey: queryKeys.users.detail(id ?? ''),

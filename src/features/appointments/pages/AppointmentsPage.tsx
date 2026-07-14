@@ -56,14 +56,15 @@ export function AppointmentsPage() {
   const listParams = useMemo(
     () =>
       view === 'calendar'
-        ? { page: 1, limit: 100, petId: petId || undefined, date: selectedDate }
+        ? // Sin filtro por día: el calendario necesita todos los turnos del rango cargado.
+          { page: 1, limit: 100, petId: petId || undefined }
         : {
             page,
             limit: 10,
             petId: petId || undefined,
             status: (status as AppointmentStatus) || undefined,
           },
-    [view, page, petId, status, selectedDate],
+    [view, page, petId, status],
   )
 
   const { data, isLoading, isError, refetch } = useAppointments(listParams)
@@ -157,6 +158,9 @@ export function AppointmentsPage() {
                         <p className="font-medium text-ink">
                           {formatTime(item.time)} · {item.reason}
                         </p>
+                        <p className="mt-1 text-sm text-ink-muted">
+                          Vet: {item.veterinarianName || 'Sin asignar'}
+                        </p>
                         <Badge className="mt-2">{APPOINTMENT_STATUS_LABELS[item.status]}</Badge>
                       </div>
                       <AppointmentActions
@@ -203,7 +207,7 @@ export function AppointmentsPage() {
             />
           </div>
           {isLoading ? (
-            <TableSkeleton cols={5} />
+            <TableSkeleton cols={6} />
           ) : (
             <>
               <Table
@@ -216,6 +220,11 @@ export function AppointmentsPage() {
                     render: (row) => `${formatDate(row.date)} ${formatTime(row.time)}`,
                   },
                   { key: 'reason', header: 'Motivo', render: (row) => row.reason },
+                  {
+                    key: 'veterinarian',
+                    header: 'Veterinario',
+                    render: (row) => row.veterinarianName || '—',
+                  },
                   {
                     key: 'status',
                     header: 'Estado',

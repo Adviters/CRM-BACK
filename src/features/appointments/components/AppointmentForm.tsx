@@ -5,11 +5,9 @@ import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Select } from '@/components/ui/Select'
 import { FormField } from '@/components/forms/FormField'
-import { APPOINTMENT_STATUS_LABELS, AppointmentStatus, Role } from '@/types/enums'
+import { APPOINTMENT_STATUS_LABELS, AppointmentStatus } from '@/types/enums'
 import { usePets } from '@/features/pets/hooks/use-pets'
-import { useUsers } from '@/features/users/hooks/use-users'
-import { usePermissions } from '@/hooks/use-permissions'
-import { Permission } from '@/constants/permissions'
+import { useVeterinarians } from '@/features/users/hooks/use-users'
 import { appointmentSchema, type AppointmentFormValues } from '../schemas/appointment.schema'
 import type { AppointmentDto } from '../types/appointment.types'
 
@@ -30,9 +28,8 @@ export function AppointmentForm({
   isSubmitting,
   submitLabel = 'Guardar',
 }: AppointmentFormProps) {
-  const { can } = usePermissions()
   const petsQuery = usePets({ page: 1, limit: 100 })
-  const usersQuery = useUsers({ page: 1, limit: 100 }, { enabled: can(Permission.USERS_MANAGE) })
+  const veterinariansQuery = useVeterinarians()
 
   const {
     register,
@@ -62,16 +59,10 @@ export function AppointmentForm({
   }, [defaultPetId, defaultDate, reset])
 
   const veterinarianOptions =
-    usersQuery.data?.data
-      .filter(
-        (user) =>
-          user.isActive &&
-          (user.role === Role.VETERINARIAN || user.role === Role.ADMIN),
-      )
-      .map((user) => ({
-        value: user.id,
-        label: `${user.firstName} ${user.lastName}`,
-      })) ?? []
+    veterinariansQuery.data?.map((user) => ({
+      value: user.id,
+      label: `${user.firstName} ${user.lastName}`,
+    })) ?? []
 
   return (
     <form className="space-y-4" onSubmit={handleSubmit(onSubmit)} noValidate>
@@ -101,28 +92,19 @@ export function AppointmentForm({
           htmlFor="veterinarianId"
           error={errors.veterinarianId?.message}
           required
-          hint={
-            can(Permission.USERS_MANAGE)
-              ? undefined
-              : 'Ingresá el UUID del veterinario asignado'
-          }
         >
-          {can(Permission.USERS_MANAGE) && veterinarianOptions.length > 0 ? (
-            <Select
-              id="veterinarianId"
-              hasError={Boolean(errors.veterinarianId)}
-              options={veterinarianOptions}
-              placeholder="Seleccionar veterinario"
-              {...register('veterinarianId')}
-            />
-          ) : (
-            <Input
-              id="veterinarianId"
-              hasError={Boolean(errors.veterinarianId)}
-              placeholder="UUID del veterinario"
-              {...register('veterinarianId')}
-            />
-          )}
+          <Select
+            id="veterinarianId"
+            hasError={Boolean(errors.veterinarianId)}
+            options={veterinarianOptions}
+            placeholder={
+              veterinariansQuery.isLoading
+                ? 'Cargando veterinarios...'
+                : 'Seleccionar veterinario'
+            }
+            disabled={veterinariansQuery.isLoading || veterinarianOptions.length === 0}
+            {...register('veterinarianId')}
+          />
         </FormField>
         <FormField
           className="md:col-span-2"

@@ -11,6 +11,13 @@ export interface UserDto {
   updatedAt: string
 }
 
+export interface VeterinarianOptionDto {
+  id: string
+  firstName: string
+  lastName: string
+  role: Role
+}
+
 export interface CreateUserPayload {
   email: string
   password: string

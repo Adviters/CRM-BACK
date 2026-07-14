@@ -1,7 +1,6 @@
 import { dayjs } from '@/lib/dayjs'
 import { cn } from '@/lib/cn'
 import type { AppointmentDto } from '../types/appointment.types'
-import { APPOINTMENT_STATUS_LABELS } from '@/types/enums'
 import { formatTime } from '@/lib/dayjs'
 
 interface AppointmentsCalendarProps {
@@ -103,7 +102,7 @@ export function AppointmentsCalendar({
               <div className="space-y-1">
                 {items.slice(0, 2).map((item) => (
                   <p key={item.id} className="truncate text-[11px] text-ink-muted">
-                    {formatTime(item.time)} · {APPOINTMENT_STATUS_LABELS[item.status]}
+                    {formatTime(item.time)} · {item.veterinarianName || 'Sin vet'}
                   </p>
                 ))}
               </div>

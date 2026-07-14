@@ -8,6 +8,7 @@ export interface AppointmentDto {
   status: AppointmentStatus
   petId: string
   veterinarianId: string
+  veterinarianName: string
   createdAt: string
   updatedAt: string
 }
