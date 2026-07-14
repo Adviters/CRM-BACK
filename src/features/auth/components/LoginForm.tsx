@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { FormField } from '@/components/forms/FormField'
 import { loginSchema, type LoginFormValues } from '../schemas/login.schema'
@@ -42,9 +43,8 @@ export function LoginForm() {
       </FormField>
 
       <FormField label="Contraseña" htmlFor="password" error={errors.password?.message} required>
-        <Input
+        <PasswordInput
           id="password"
-          type="password"
           autoComplete="current-password"
           hasError={Boolean(errors.password)}
           placeholder="••••••••"

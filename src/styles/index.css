@@ -109,6 +109,39 @@
     box-shadow: var(--shadow-panel);
   }
 
+  .login-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background:
+      radial-gradient(ellipse 70% 55% at 12% 8%, #d8efe7 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 92% 96%, #dde5f2 0%, transparent 50%),
+      linear-gradient(180deg, #f6f7f9 0%, #eef1f5 100%);
+  }
+
+  html.dark .login-backdrop {
+    background:
+      radial-gradient(ellipse 70% 55% at 12% 8%, #12352c 0%, transparent 55%),
+      radial-gradient(ellipse 55% 45% at 92% 96%, #1a2433 0%, transparent 50%),
+      linear-gradient(180deg, #0d1117 0%, #121820 100%);
+  }
+
+  .login-backdrop-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    opacity: 0.12;
+    background-image:
+      linear-gradient(var(--color-border) 1px, transparent 1px),
+      linear-gradient(90deg, var(--color-border) 1px, transparent 1px);
+    background-size: 56px 56px;
+    mask-image: radial-gradient(ellipse 75% 65% at 50% 45%, #000 20%, transparent 75%);
+  }
+
+  html.dark .login-backdrop-grid {
+    opacity: 0.18;
+  }
+
   .page-enter {
     animation: page-enter 280ms ease-out;
   }

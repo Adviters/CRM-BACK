@@ -1,0 +1,14 @@
+services:
+  front:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: /api
+        VITE_APP_NAME: PetShop CRM
+    container_name: petshop-front
+    restart: unless-stopped
+    ports:
+      - '80:80'
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'

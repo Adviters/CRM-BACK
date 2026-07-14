@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
+import { PasswordInput } from '@/components/ui/PasswordInput'
 import { Select } from '@/components/ui/Select'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { FormField } from '@/components/forms/FormField'
@@ -75,9 +76,8 @@ function CreateUserForm({
           <Input id="email" type="email" hasError={Boolean(errors.email)} {...register('email')} />
         </FormField>
         <FormField label="Contraseña" htmlFor="password" error={errors.password?.message} required>
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             hasError={Boolean(errors.password)}
             {...register('password')}
           />
@@ -159,9 +159,8 @@ function EditUserForm({
           error={errors.password?.message}
           hint="Dejar vacío para mantener la actual"
         >
-          <Input
+          <PasswordInput
             id="password"
-            type="password"
             hasError={Boolean(errors.password)}
             {...register('password')}
           />
