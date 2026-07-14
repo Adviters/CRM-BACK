@@ -9,6 +9,7 @@ import { PaginatedResultDto } from '../common/dto/paginated-result.dto';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
+import { VeterinarianOptionDto } from './dto/veterinarian-option.dto';
 import { UserMapper } from './mappers/user.mapper';
 import { UsersRepository } from './users.repository';
 
@@ -48,6 +49,16 @@ export class UsersService {
       page,
       limit,
     );
+  }
+
+  async findAssignableVeterinarians(): Promise<VeterinarianOptionDto[]> {
+    const users = await this.usersRepository.findAssignableVeterinarians();
+    return users.map((user) => ({
+      id: user.id,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      role: user.role as VeterinarianOptionDto['role'],
+    }));
   }
 
   async findOne(id: string): Promise<UserResponseDto> {

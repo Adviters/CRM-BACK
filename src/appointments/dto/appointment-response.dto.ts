@@ -23,6 +23,9 @@ export class AppointmentResponseDto {
   @ApiProperty()
   veterinarianId!: string;
 
+  @ApiProperty({ example: 'Diego Veterinario' })
+  veterinarianName!: string;
+
   @ApiProperty()
   createdAt!: Date;
 

@@ -1,9 +1,11 @@
-import { Appointment } from '@prisma/client';
 import { AppointmentStatus } from '../../common/enums/appointment-status.enum';
 import { AppointmentResponseDto } from '../dto/appointment-response.dto';
+import type { AppointmentWithVeterinarian } from '../appointments.repository';
 
 export class AppointmentMapper {
-  static toResponse(appointment: Appointment): AppointmentResponseDto {
+  static toResponse(
+    appointment: AppointmentWithVeterinarian,
+  ): AppointmentResponseDto {
     return {
       id: appointment.id,
       date: appointment.date,
@@ -12,6 +14,7 @@ export class AppointmentMapper {
       status: appointment.status as AppointmentStatus,
       petId: appointment.petId,
       veterinarianId: appointment.veterinarianId,
+      veterinarianName: `${appointment.veterinarian.firstName} ${appointment.veterinarian.lastName}`.trim(),
       createdAt: appointment.createdAt,
       updatedAt: appointment.updatedAt,
     };
