@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Appointment, AppointmentStatus, Prisma } from '@prisma/client';
+import { Appointment, AppointmentStatus, Prisma, User } from '@prisma/client';
 import { PrismaService } from '../database/prisma.service';
 
 export type CreateAppointmentData = {
@@ -18,17 +18,31 @@ export type UpdateAppointmentData = Partial<
   status?: AppointmentStatus;
 };
 
+export type AppointmentWithVeterinarian = Appointment & {
+  veterinarian: Pick<User, 'id' | 'firstName' | 'lastName'>;
+};
+
+const veterinarianSelect = {
+  id: true,
+  firstName: true,
+  lastName: true,
+} satisfies Prisma.UserSelect;
+
 @Injectable()
 export class AppointmentsRepository {
   constructor(private readonly prisma: PrismaService) {}
 
-  create(data: CreateAppointmentData): Promise<Appointment> {
-    return this.prisma.appointment.create({ data });
+  create(data: CreateAppointmentData): Promise<AppointmentWithVeterinarian> {
+    return this.prisma.appointment.create({
+      data,
+      include: { veterinarian: { select: veterinarianSelect } },
+    });
   }
 
-  findById(id: string): Promise<Appointment | null> {
+  findById(id: string): Promise<AppointmentWithVeterinarian | null> {
     return this.prisma.appointment.findFirst({
       where: { id, deletedAt: null },
+      include: { veterinarian: { select: veterinarianSelect } },
     });
   }
 
@@ -41,7 +55,7 @@ export class AppointmentsRepository {
       status?: AppointmentStatus;
       date?: Date;
     },
-  ): Promise<{ items: Appointment[]; total: number }> {
+  ): Promise<{ items: AppointmentWithVeterinarian[]; total: number }> {
     const where: Prisma.AppointmentWhereInput = {
       deletedAt: null,
       ...(filters.petId ? { petId: filters.petId } : {}),
@@ -58,6 +72,7 @@ export class AppointmentsRepository {
         skip: (page - 1) * limit,
         take: limit,
         orderBy: [{ date: 'asc' }, { time: 'asc' }],
+        include: { veterinarian: { select: veterinarianSelect } },
       }),
       this.prisma.appointment.count({ where }),
     ]);
@@ -65,17 +80,22 @@ export class AppointmentsRepository {
     return { items, total };
   }
 
-  update(id: string, data: UpdateAppointmentData): Promise<Appointment> {
+  update(
+    id: string,
+    data: UpdateAppointmentData,
+  ): Promise<AppointmentWithVeterinarian> {
     return this.prisma.appointment.update({
       where: { id },
       data,
+      include: { veterinarian: { select: veterinarianSelect } },
     });
   }
 
-  softDelete(id: string): Promise<Appointment> {
+  softDelete(id: string): Promise<AppointmentWithVeterinarian> {
     return this.prisma.appointment.update({
       where: { id },
       data: { deletedAt: new Date() },
+      include: { veterinarian: { select: veterinarianSelect } },
     });
   }
 

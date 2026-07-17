@@ -57,6 +57,17 @@ export class UsersRepository {
     return { items, total };
   }
 
+  findAssignableVeterinarians(): Promise<User[]> {
+    return this.prisma.user.findMany({
+      where: {
+        deletedAt: null,
+        isActive: true,
+        role: Role.VETERINARIAN,
+      },
+      orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
+    });
+  }
+
   update(id: string, data: UpdateUserData): Promise<User> {
     return this.prisma.user.update({
       where: { id },

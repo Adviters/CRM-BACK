@@ -3,11 +3,11 @@ name: CodeQL
 on:
   pull_request:
     branches:
-      - main
+      - master
       - develop
   push:
     branches:
-      - main
+      - master
       - develop
   schedule:
     # Weekly scan to catch newly published vulnerabilities

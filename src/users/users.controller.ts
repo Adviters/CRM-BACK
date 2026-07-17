@@ -25,23 +25,33 @@ import { Role } from '../common/enums/role.enum';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserResponseDto } from './dto/user-response.dto';
+import { VeterinarianOptionDto } from './dto/veterinarian-option.dto';
 import { UsersService } from './users.service';
 
 @ApiTags('users')
 @ApiBearerAuth()
-@Roles(Role.ADMIN)
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Post()
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Create a user' })
   @ApiCreatedResponse({ type: UserResponseDto })
   create(@Body() dto: CreateUserDto): Promise<UserResponseDto> {
     return this.usersService.create(dto);
   }
 
+  @Get('veterinarians')
+  @Roles(Role.ADMIN, Role.VETERINARIAN, Role.RECEPTIONIST)
+  @ApiOperation({ summary: 'List assignable veterinarians for appointments' })
+  @ApiOkResponse({ type: VeterinarianOptionDto, isArray: true })
+  findVeterinarians(): Promise<VeterinarianOptionDto[]> {
+    return this.usersService.findAssignableVeterinarians();
+  }
+
   @Get()
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'List users' })
   @ApiOkResponse({ type: UserResponseDto, isArray: true })
   findAll(@Query() query: PaginationQueryDto) {
@@ -49,6 +59,7 @@ export class UsersController {
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Get user by id' })
   @ApiOkResponse({ type: UserResponseDto })
   findOne(@Param('id', ParseUUIDPipe) id: string): Promise<UserResponseDto> {
@@ -56,6 +67,7 @@ export class UsersController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   @ApiOperation({ summary: 'Update user' })
   @ApiOkResponse({ type: UserResponseDto })
   update(
@@ -66,6 +78,7 @@ export class UsersController {
   }
 
   @Delete(':id')
+  @Roles(Role.ADMIN)
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Soft delete user' })
   @ApiNoContentResponse()

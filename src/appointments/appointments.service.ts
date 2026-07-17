@@ -183,8 +183,7 @@ export class AppointmentsService {
       throw new BadRequestException('Veterinarian not found');
     }
 
-    const role = user.role as Role;
-    if (role !== Role.VETERINARIAN && role !== Role.ADMIN) {
+    if ((user.role as Role) !== Role.VETERINARIAN) {
       throw new BadRequestException('Assigned user is not a veterinarian');
     }
   }
